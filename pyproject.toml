@@ -21,6 +21,7 @@ include = ["tutor_ds*"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+pythonpath = ["."]
 
 [tool.coverage.run]
 source = ["tutor_ds"]
