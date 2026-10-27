@@ -45,6 +45,14 @@ def test_d5_message_lists_values():
     assert f.message == "Condicional encadenado: 4 ramas comparan `tipo` con los valores `'admin'`, `'docente'`, `'estudiante'`."
 
 
+def test_d5_message_truncates_after_four_values():
+    f = _build("D5", {"variable": "tipo", "branches": 6, "values": ["'a'", "'b'", "'c'", "'d'", "'e'"]})
+    assert f.message == (
+        "Condicional encadenado: 6 ramas comparan `tipo` con los valores "
+        "`'a'`, `'b'`, `'c'`, `'d'`, …."
+    )
+
+
 def test_d6_message_joins_function_and_parameter_names():
     f = _build("D6", {"params": ["base", "iva", "descuento"], "functions": ["calc_total", "calc_iva"]})
     assert f.message == (
