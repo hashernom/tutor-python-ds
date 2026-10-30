@@ -52,6 +52,38 @@ def test_chain_on_different_variables_is_not_flagged():
     assert _d5(source) == []
 
 
+def test_float_literals_are_detected():
+    source = (
+        "def f(nivel):\n"
+        "    if nivel == 1.5:\n"
+        "        return 1\n"
+        "    elif nivel == 2.5:\n"
+        "        return 2\n"
+        "    elif nivel == 3.5:\n"
+        "        return 3\n"
+        "    return 0\n"
+    )
+    findings = _d5(source)
+    assert len(findings) == 1
+    assert "`1.5`" in findings[0].message
+
+
+def test_negative_literals_are_detected():
+    source = (
+        "def f(codigo):\n"
+        "    if codigo == -1:\n"
+        "        return 1\n"
+        "    elif codigo == -2:\n"
+        "        return 2\n"
+        "    elif codigo == -3:\n"
+        "        return 3\n"
+        "    return 0\n"
+    )
+    findings = _d5(source)
+    assert len(findings) == 1
+    assert findings[0].evidence == "codigo"
+
+
 def test_isinstance_chain_is_flagged():
     source = (
         "def f(x):\n"

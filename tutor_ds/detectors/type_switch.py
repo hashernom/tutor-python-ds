@@ -6,7 +6,7 @@ from tutor_ds.models import AnalysisContext, Detection, Severity
 
 _COMPARISON_OPS = (ast.Eq, ast.NotEq, ast.In, ast.NotIn)
 _ISINSTANCE_NAME = "isinstance"
-_LITERAL_TYPES = (str, int)
+_NUMERIC_TYPES = (int, float, complex)
 
 
 @dataclass(frozen=True)
@@ -22,25 +22,38 @@ def _is_chain_head(node: ast.If, parents: dict[ast.AST, ast.AST]) -> bool:
     return True
 
 
+def _is_numeric_constant(node: ast.AST) -> bool:
+    return (
+        isinstance(node, ast.Constant)
+        and isinstance(node.value, _NUMERIC_TYPES)
+        and not isinstance(node.value, bool)
+    )
+
+
 def _literal_text(node: ast.AST) -> str | None:
-    if not isinstance(node, ast.Constant) or type(node.value) not in _LITERAL_TYPES:
-        return None
-    return normalize_expr(node)
+    if isinstance(node, ast.Constant):
+        return normalize_expr(node)
+    if (
+        isinstance(node, ast.UnaryOp)
+        and isinstance(node.op, ast.USub)
+        and _is_numeric_constant(node.operand)
+    ):
+        return normalize_expr(node)
+    return None
 
 
 def _comparator_values(node: ast.AST) -> tuple[str, ...] | None:
     text = _literal_text(node)
     if text is not None:
         return (text,)
-    if not isinstance(node, (ast.Tuple, ast.List)) or not node.elts:
+    if not isinstance(node, (ast.Tuple, ast.List)):
         return None
     values: list[str] = []
     for element in node.elts:
         element_text = _literal_text(element)
-        if element_text is None:
-            return None
-        values.append(element_text)
-    return tuple(values)
+        if element_text is not None:
+            values.append(element_text)
+    return tuple(values) if values else None
 
 
 def _isinstance_values(node: ast.AST) -> tuple[str, tuple[str, ...]] | None:
