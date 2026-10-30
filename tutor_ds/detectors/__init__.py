@@ -1,9 +1,14 @@
 from tutor_ds.detectors.base import Detector
+from tutor_ds.detectors.duplication import DuplicationDetector
 from tutor_ds.detectors.io_mixing import IoMixingDetector
 from tutor_ds.detectors.magic_numbers import MagicNumberDetector
 from tutor_ds.models import AnalysisContext, Detection
 
-DETECTORS: tuple[Detector, ...] = (IoMixingDetector(), MagicNumberDetector())
+DETECTORS: tuple[Detector, ...] = (
+    IoMixingDetector(),
+    MagicNumberDetector(),
+    DuplicationDetector(),
+)
 
 
 def run_detectors(ctx: AnalysisContext) -> list[Detection]:
