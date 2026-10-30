@@ -3,6 +3,7 @@ from tutor_ds.detectors.duplication import DuplicationDetector
 from tutor_ds.detectors.io_mixing import IoMixingDetector
 from tutor_ds.detectors.long_script import LongScriptDetector
 from tutor_ds.detectors.magic_numbers import MagicNumberDetector
+from tutor_ds.detectors.type_switch import TypeSwitchDetector
 from tutor_ds.models import AnalysisContext, Detection
 
 DETECTORS: tuple[Detector, ...] = (
@@ -10,6 +11,7 @@ DETECTORS: tuple[Detector, ...] = (
     MagicNumberDetector(),
     DuplicationDetector(),
     LongScriptDetector(),
+    TypeSwitchDetector(),
 )
 
 
