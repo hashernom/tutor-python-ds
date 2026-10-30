@@ -24,8 +24,16 @@ def test_identical_function_bodies_are_flagged_once():
 
 
 def test_short_repeated_blocks_are_ignored():
-    source = "def f(x):\n    if x:\n        x += 1\n\ndef g(x):\n    if x:\n        x += 1\n"
+    source = "def f(x):\n    x += 1\n\ndef g(x):\n    x += 1\n"
     assert _d3(source) == []
+
+
+def test_single_large_statement_duplicated_is_flagged():
+    body = "    return base * 1.19 + base * 0.10 + base * 0.05 - iva\n"
+    source = f"def calcular_a(base, iva):\n{body}\ndef calcular_b(base, iva):\n{body}"
+    findings = _d3(source)
+    assert len(findings) == 1
+    assert "2 lugares" in findings[0].message
 
 
 def test_nested_duplicates_are_reported_once():

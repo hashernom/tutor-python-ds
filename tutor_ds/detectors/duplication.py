@@ -53,8 +53,6 @@ def _groups(
 ) -> dict[str, list[list[ast.stmt]]]:
     groups: dict[str, list[list[ast.stmt]]] = {}
     for block in blocks:
-        if len(block) < 2:
-            continue
         groups.setdefault(_fingerprint(block), []).append(block)
     return groups
 
