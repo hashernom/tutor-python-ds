@@ -26,9 +26,10 @@ def test_trivial_literals_and_named_constants_are_ignored():
 def test_three_occurrences_raise_severity():
     findings = _d2("def f(a):\n    return a * 7 + 7 * a + (7 - a)\n")
     assert findings[0].severity is Severity.ALTA
-    assert findings[0].message.startswith("Número mágico `7`: aparece 3 veces")
+    assert findings[0].message == "Número mágico `7`: aparece 3 veces en operaciones (línea 2)."
 
 
 def test_repeated_literal_outside_rules_is_still_flagged():
     findings = _d2("def f(a, b):\n    x = 4\n    y = 4\n    return a + b\n")
     assert [f.evidence for f in findings] == ["4"]
+    assert findings[0].message == "Número mágico `4`: aparece 2 veces en el archivo (líneas 2, 3)."

@@ -8,6 +8,7 @@ _IGNORED_VALUES = frozenset({0, 1, 2, -1})
 _USAGE_COMPARISONS = "comparaciones"
 _USAGE_OPERATIONS = "operaciones"
 _USAGE_BOTH = "comparaciones y operaciones"
+_USAGE_FILE = "el archivo"
 _HIGH_SEVERITY_OCCURRENCES = 3
 
 
@@ -110,7 +111,13 @@ def _usage(occurrences: list[_Occurrence]) -> str:
         return _USAGE_BOTH
     if has_compare:
         return _USAGE_COMPARISONS
-    return _USAGE_OPERATIONS
+    if has_arith:
+        return _USAGE_OPERATIONS
+    return _USAGE_FILE
+
+
+def _unique_lines(occurrences: list[_Occurrence]) -> list[int]:
+    return list(dict.fromkeys(occurrence.line for occurrence in occurrences))
 
 
 def _is_magic(occurrences: list[_Occurrence], min_occurrences: int) -> bool:
@@ -158,7 +165,7 @@ class MagicNumberDetector:
                     context={
                         "value": ctx.segment(first.node, limit=20),
                         "count": len(ordered),
-                        "lines": [occurrence.line for occurrence in ordered],
+                        "lines": _unique_lines(ordered),
                         "usage": _usage(ordered),
                     },
                 )
