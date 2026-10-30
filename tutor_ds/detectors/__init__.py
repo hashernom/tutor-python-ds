@@ -1,4 +1,5 @@
 from tutor_ds.detectors.base import Detector
+from tutor_ds.detectors.data_clumps import DataClumpDetector
 from tutor_ds.detectors.duplication import DuplicationDetector
 from tutor_ds.detectors.io_mixing import IoMixingDetector
 from tutor_ds.detectors.long_script import LongScriptDetector
@@ -12,6 +13,7 @@ DETECTORS: tuple[Detector, ...] = (
     DuplicationDetector(),
     LongScriptDetector(),
     TypeSwitchDetector(),
+    DataClumpDetector(),
 )
 
 
