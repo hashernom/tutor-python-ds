@@ -21,10 +21,10 @@ pip install -e ".[dev]"
 
 ## Uso
 
-La CLI todavía no está disponible. Para analizar un archivo:
+Para inicializar la interfaz visual del tutor ejecutar este comando en la terminal donde esta el proyecto:
 
 ```bash
-python3 -c "from pathlib import Path; from tutor_ds.report import analyze_file, render_text; print(render_text(analyze_file(Path('mi_archivo.py'))))"
+python interfaz.py
 ```
 
 ## Pruebas
